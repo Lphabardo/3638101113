@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Дія</title>
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Дія">
+
+    <link rel="manifest" href="data:application/json,{%22name%22:%22%D0%94%D1%96%D1%8F%22,%22short_name%22:%22%D0%94%D1%96%D1%8F%22,%22display%22:%22standalone%22,%22start_url%22:%22.%22,%22background_color%22:%22%23b4d3e9%22,%22theme_color%22:%22%23b4d3e9%22}">
+    
+    <link rel="apple-touch-icon" href="https://yt3.googleusercontent.com/ytc/AIdro_mhhrye3ItZjJp_TzKbeC8IvubXfa8KpSpD2UEI56JxYA=s120-c-k-c0x00ffffff-no-rj">
+    <link rel="icon" type="image/png" href="https://yt3.googleusercontent.com/ytc/AIdro_mhhrye3ItZjJp_TzKbeC8IvubXfa8KpSpD2UEI56JxYA=s120-c-k-c0x00ffffff-no-rj">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent;}
+body{background:linear-gradient(180deg,#b4d3e9 0%,#cae3f4 40%,#e3f2fd 70%,#e2f5dc 100%);height:100vh;overflow:hidden;}
+#toast{position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-20px);background:rgba(30,30,30,0.92);color:#fff;font-size:14px;padding:10px 20px;border-radius:20px;z-index:9999;opacity:0;transition:opacity 0.25s,transform 0.25s;pointer-events:none;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#pin-screen{height:100vh;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:60px 30px 30px;width:100%;}
+
+.splash-hello{margin-bottom: 70px;}
+.splash-btn-tryzub img {width: 58px;height:58px;object-fit:contain; color: #000;}
+
+.splash-btn-diia-img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain; 
+  color: #000; 
+  border-radius: 16px; /* Вот исправление. Будет аккуратное закругление */
+}
+
+
+.header-section{display:flex;flex-direction:column;align-items:center;margin-top:40px;width:100%;}
+.pin-title{color:#000;font-size:26px;font-weight:500;letter-spacing:-0.5px;text-align:center;}
+.dots-row{display:flex;justify-content:center;gap:8px;margin-top:70px;margin-bottom:50px;}
+.dot{width:14px;height:14px;border-radius:50%;background-color:rgba(0,0,0,0.18);transition:background-color 0.15s ease;}
+.dot.active{background-color:#1c1c1e;}
+.keyboard{display:grid;grid-template-columns:repeat(3,1fr);justify-items:center;align-items:center;gap:22px 30px;width:100%;max-width:340px;margin-bottom:60px;}
+.pin-btn{width:85px;height:85px;border-radius:50%;background-color:#fff;border:none;font-size:32px;font-weight:400;color:#000;cursor:pointer;display:flex;justify-content:center;align-items:center;transition:background-color 0.1s ease;}
+.pin-btn:active{background-color:#e5e5ea;}
+.icon-btn{background-color:transparent!important;}
+.icon-btn:active{opacity:0.4;}
+
+/* Настраиваем картинку Face ID внутри кнопки */
+#FCDbtn img {
+  width: 52px;         /* Оптимальный размер иконки */
+  height: 52px;        /* Делаем её квадратной */
+  object-fit: contain; /* Чтобы картинка не искажалась */
+  opacity: 0.85;       /* Слегка приглушаем цвет, чтобы сочетался со стилем Дії */
+  transition: opacity 0.2s;
+}
+
+/* Эффект при нажатии на кнопку Face ID */
+#FCDbtn:active img {
+  opacity: 0.5;        /* При нажатии иконка красиво блекнет */
+}
+
+/* Сама кнопка-контейнер для Face ID */
+#FCDbtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent !important; /* Убираем белый фон, если это иконка */
+  border: none !important;            /* Убираем рамки */
+  box-shadow: none !important;        /* Убираем тени */
+}
+
+.forgot-btn{font-size:16px;color:#000;background:none;border:none;cursor:pointer;margin-bottom:50px;}
+#main-screen{height:100vh;display:flex;flex-direction:column;width:100%;position:relative;}
+.screen-content{display:none;flex:1;overflow-y:auto;width:100%;}
+.screen-content.active{display:block!important;}
+.feed-content{padding:50px 20px 110px;}
+.welcome-text{font-size:32px;font-weight:600;color:#000;letter-spacing:-0.5px;margin-bottom:20px;}
+.card-nezlamnist,.card-cashback{width:100%;border-radius:26px;padding:24px;position:relative;margin-bottom:24px;background:rgba(255,255,255,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.4);}
+.card-title{font-size:24px;font-weight:700;color:#000;margin-bottom:12px;}
+.card-desc{font-size:15px;color:#2c2c2e;line-height:1.4;max-width:85%;margin-bottom:24px;}
+.card-icons-row{display:flex;gap:8px;align-items:center;}
+
+
+
+
+/* 1. ГЛАВНОЕ ПРАВИЛО ДЛЯ ВСЕХ КРУГЛЫХ ИКОНОК (ЦЕНТРИРОВАНИЕ И РАЗМЕР КРУГА) */
+.mini-icon {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* 2. ЗАДНИЕ ФОНЫ ДЛЯ КАЖДОГО ЦВЕТА */
+.icon-blue-img   { background: #0a84ff !important; }
+.icon-green      { background: #30d158 !important; }
+.icon-yellow-img { background: #e7d146 !important; }
+
+/* 3. КАРТИНКИ ВНУТРИ СИНЕГО И ЗЕЛЕНОГО КРУГОВ (БЕЛЫЕ, 16px) */
+.mini-icon img.doc-mini-svg {
+  width: 16px !important;
+  height: 16px !important;
+  object-fit: contain !important;
+  filter: invert(100%) brightness(200%) !important; /* Делает их чисто белыми */
+}
+
+/* 4. КАРТИНКА ВНУТРИ ЖЕЛТОГО КРУГА (ПЕРСОНАЛЬНЫЙ РАЗМЕР, ЕСЛИ НУЖНО 10px И БЕЗ БЕЛОГО ФИЛЬТРА) */
+.icon-yellow-img img {
+  width: 16px !important; /* Поставил 14px, чтобы она не была слишком микроскопической, но ты можешь вернуть 10px */
+  height: 16px !important;
+  object-fit: contain !important;
+}
+
+
+
+
+.arrow-btn{position:absolute;bottom:24px;right:24px;width:36px;height:36px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:none;cursor:pointer;}
+.arrow-black{background:#000;}.arrow-black::after{content:'';width:8px;height:8px;border-right:2px solid #fff;border-top:2px solid #fff;transform:rotate(45deg);margin-left:-2px;}
+.arrow-white{background:#fff;}.arrow-white::after{content:'';width:8px;height:8px;border-right:2px solid #000;border-top:2px solid #000;transform:rotate(45deg);margin-left:-2px;}
+.quick-services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;margin-bottom:28px;}
+.service-item{display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;}
+.service-icon-box{width:64px;height:64px;background:#000;border-radius:18px;display:flex;justify-content:center;align-items:center;margin-bottom:8px;}
+.service-icon-box img{width:28px;height:28px;object-fit:contain;}
+.service-item span{font-size:13px;font-weight:500;color:#000;line-height:1.2;padding:0 4px;}
+.card-drones-image-wrapper{width:100%;height:180px;border-radius:26px;position:relative;margin-bottom:24px;overflow:hidden;}
+.card-drones-image-wrapper .banner-img{width:100%;height:100%;object-fit:fill;}
+.drones-floating-text{position:absolute;bottom:24px;left:24px;color:#fff;font-size:20px;z-index:2;}
+.cashback-amount{font-size:32px;font-weight:600;color:#000;margin-bottom:6px;}
+.cashback-desc{font-size:14px;color:#1c1c1e;margin-bottom:16px;}
+.cashback-lines{display:flex;gap:3px;}
+.cb-line{height:22px;border-radius:1px;}.cb-w8{width:8px;}.cb-w4{width:4px;}.cb-blue{background:#0057b7;}.cb-yellow{background:#ffd700;}
+.popular-services-section{width:100%;margin-bottom:40px;}
+.section-title{font-size:22px;font-weight:600;color:#000;margin-bottom:16px;}
+.services-list-card{width:100%;border-radius:26px;background:rgba(255,255,255,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.4);overflow:hidden;}
+.service-row{display:flex;justify-content:space-between;align-items:center;padding:24px;position:relative;cursor:pointer;}
+.service-row:not(:last-child)::after{content:'';position:absolute;bottom:0;left:24px;right:24px;height:1px;background:rgba(0,0,0,0.06);}
+.service-row-text{font-size:18px;font-weight:500;color:#000;max-width:80%;}
+.row-arrow-btn{width:32px;height:32px;border-radius:50%;background:#000;display:flex;justify-content:center;align-items:center;border:none;}
+.row-arrow-btn::after{content:'';width:7px;height:7px;border-right:2px solid #fff;border-top:2px solid #fff;transform:rotate(45deg);margin-left:-2px;}
+.documents-layout{display:flex;flex-direction:column;align-items:center;padding-top:40px;padding-bottom:110px;height:100%;overflow:hidden;}
+.carousel-window{width:100%;max-width:390px;flex:1;display:flex;align-items:center;overflow:hidden;position:relative;}
+.document-carousel{display:flex;padding-left:24px;gap:20px;align-items:center;transition:transform 0.4s cubic-bezier(0.25,1,0.5,1);width:max-content;}
+.flip-card-inner{width:330px !important;height:520px !important;position:relative;transform-style:preserve-3d;transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);flex-shrink:0;margin:0 auto;}
+.flip-card-inner.flipped{transform:rotateY(180deg);}
+
+
+.passport-card-front,.passport-card-back{width:100%;height:100%;position:absolute;top:0;left:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:36px;}
+
+.passport-card-front{
+  background: rgba(255, 255, 255, 0.28) !important; /* Делаем основу полупрозрачной */
+  backdrop-filter: blur(20px) !important;            /* Эффект матового стекла (размывает фон сзади) */
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important; /* Аккуратная светлая рамка */
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.card-foreign, 
+.card-rnokpp, 
+.card-driver, 
+.card-edoc {
+  background: rgba(255, 255, 255, 0.05) !important; 
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+.doc-header-title{font-size:21px;font-weight:600;color:#0f1419;line-height:1.25;margin-bottom:20px;}
+.doc-main-body{display:flex;gap:18px;align-items:flex-start;}
+.doc-avatar{width:135px;height:186px;border-radius:20px;object-fit:cover;background:#e1e6eb;}
+.doc-fields{display:flex;flex-direction:column;gap:12px;flex:1;}
+.field-block{display:flex;flex-direction:column;}
+.field-label{font-size:13px;color:#4a535d;margin-bottom:2px;}
+.field-value{font-size:15px;color:#0f1419;font-weight:600;}
+.signature-img{width:76px;height:auto;margin-top:4px;}
+.doc-status-ticker{width:calc(100% + 48px);margin-left:-24px;margin-right:-24px;margin-top:auto;margin-bottom:18px;background:linear-gradient(90deg,#bbf0b5 0%,#c6f4e4 100%);padding:6px 0;overflow:hidden;white-space:nowrap;display:flex;}
+.ticker-wrap{display:inline-block;animation:marquee 25s linear infinite;padding-left:100%;}
+.ticker-text{font-size:13px;font-weight:500;color:#09391c;}
+@keyframes marquee{0%{transform:translate3d(0,0,0);}100%{transform:translate3d(-100%,0,0);}}
+.doc-footer{display:flex;justify-content:space-between;align-items:flex-end;width:100%;}
+.doc-name-block{display:flex;flex-direction:column;gap:2px;}
+.doc-last-name{font-size:21px;font-weight:600;color:#0f1419;}
+.doc-first-name{font-size:19px;font-weight:500;color:#0f1419;}
+.doc-menu-btn{width:28px;height:28px;border-radius:50%;background:#000;border:none;display:flex;justify-content:center;align-items:center;cursor:pointer;z-index:5; }
+.doc-menu-btn::after{content:'...';color:#fff;font-size:23px;letter-spacing:0.5px;line-height:0.5; margin-top: -14px;}
+.passport-card-back{background:#fff;transform:rotateY(180deg);padding:32px 24px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;}
+.back-tap-zone{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;}
+.timer-text{font-size:15px;color:#7a7a7a;text-align:center;margin-top:10px;}
+.code-display-container{width:220px;height:220px;display:flex;justify-content:center;align-items:center;background:#fff;margin-top:10px;}
+.qrcode-box{display:flex;justify-content:center;align-items:center;}
+.barcode-box{display:none;max-width:240px;height:85px;}
+.back-controls-row{display:flex;gap:30px;justify-content:center;width:100%;margin-bottom:15px;}
+.control-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;}
+.control-btn-circle{width:54px;height:54px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:none;}
+.btn-black{background:#000;color:#fff;}.btn-gray{background:#f2f2f7;color:#000;}
+.control-item span{font-size:14px;font-weight:500;color:#000;}
+.carousel-dots{display:flex;gap:7px;justify-content:center;margin-top:20px;margin-bottom:24px;}
+.c-dot{width:7px;height:7px;border-radius:50%;background:rgba(0,0,0,0.15);transition:background-color 0.2s;cursor:pointer;}
+.c-dot.active{background:rgba(0,0,0,0.4);}
+
+
+.tab-bar {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 80px !important; /* Добавим высоту */
+  background: #000 !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  padding-bottom: 20px !important; /* Учитываем отступ снизу */
+}
+
+
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;cursor:pointer;width:70px;}
+.tab-item span{font-size:11px;color:#8e8e93;}
+.tab-item img{width:24px;height:24px;object-fit:contain;filter:invert(60%);}
+.tab-item.active span{color:#fff;}
+.tab-item.active img{filter:invert(100%);}
+.home-indicator{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:140px;height:5px;background:#fff;border-radius:10px;z-index:11;}
+#sheet-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.15);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);z-index:100;opacity:0;visibility:hidden;transition:opacity 0.3s,visibility 0.3s;}
+#sheet-overlay.open{opacity:1;visibility:visible;}
+.bottom-sheet-container{position:absolute;bottom:0;left:0;width:100%;padding:16px 16px 34px;display:flex;flex-direction:column;gap:12px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.25,1,0.5,1);}
+#sheet-overlay.open .bottom-sheet-container{transform:translateY(0);}
+.sheet-main-box{background:#fff;border-radius:32px;overflow:hidden;display:flex;flex-direction:column;}
+.sheet-menu-item{display:flex;align-items:center;gap:16px;padding:20px 24px;border:none;background:transparent;cursor:pointer;text-align:left;width:100%;position:relative;}
+.sheet-menu-item:not(:last-child)::after{content:'';position:absolute;bottom:0;left:64px;right:0;height:1px;background:#f2f2f7;}
+.sheet-menu-item .menu-icon{width:24px;height:24px;object-fit:contain;}
+.sheet-menu-item span{font-size:17px;font-weight:500;color:#000;}
+.sheet-codes-row{display:flex;border-top:1px solid #f2f2f7;background:#fff;padding:24px 0;justify-content:space-around;align-items:center;}
+.sheet-code-btn-wrapper{display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:none;cursor:pointer;}
+.sheet-circle-icon{width:56px;height:56px;border-radius:50%;background:#000;display:flex;justify-content:center;align-items:center;}
+.sheet-circle-icon img{width:26px;height:26px;filter:invert(100%);}
+.sheet-code-btn-wrapper span{font-size:13px;font-weight:500;color:#000;}
+.sheet-close-btn{width:100%;background:#fff;border-radius:28px;padding:20px 0;border:none;font-size:17px;font-weight:600;color:#000;cursor:pointer;text-align:center;}
+.full-info-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#f2f2f7;z-index:200;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.25,1,0.5,1);}
+.full-info-modal.open{transform:translateY(0)!important;}
+.fi-header-panel{background:#f2f2f7;padding:14px 20px 10px;display:flex;flex-direction:column;align-items:flex-start;position:relative;border-bottom:1px solid rgba(0,0,0,0.03);touch-action:none;}
+.fi-drag-handle{width:36px;height:5px;background:#c7c7cc;border-radius:3px;align-self:center;margin-bottom:20px;}
+.fi-main-title{font-size:21px;font-weight:600;color:#000;line-height:1.25;}
+.fi-number-box{display:flex;align-items:center;gap:8px;margin-top:18px;margin-bottom:12px;}
+.fi-passport-num{font-size:30px;font-weight:500;color:#000;}
+.fi-copy-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;padding:4px;}
+.fi-copy-btn img{width:20px;height:20px;opacity:0.8;}
+.fi-ticker-line{width:calc(100% + 40px);margin-left:-20px;margin-right:-20px;background:linear-gradient(90deg,#bbf0b5 0%,#c6f4e4 100%);padding:6px 0;overflow:hidden;white-space:nowrap;display:flex;}
+.fi-back-btn{position:absolute;right:20px;top:48px;background:none;border:none;font-size:16px;color:#0a84ff;cursor:pointer;}
+.fi-scroll-content{flex:1;overflow-y:auto;padding:16px 16px 120px;display:flex;flex-direction:column;gap:14px;}
+.fi-card-white{background:#fff;border-radius:24px;padding:22px 20px;width:100%;}
+.fi-ua-fullname{font-size:25px;font-weight:600;color:#000;line-height:1.2;}
+.fi-en-fullname{font-size:16px;color:#000;margin-top:10px;}
+.fi-photo-row{display:flex;gap:20px;align-items:flex-start;margin-top:16px;}
+.fi-large-avatar{width:154px;height:198px;border-radius:20px;object-fit:cover;background:#e1e6eb;}
+.fi-photo-side-fields{display:flex;flex-direction:column;flex:1;height:100%;}
+.fi-meta-label{font-size:13px;color:#8e8e93;line-height:1.3;}
+.fi-meta-value{font-size:16px;color:#000;font-weight:500;margin-top:4px;margin-bottom:18px;}
+.fi-signature-wrap{margin-top:auto;padding-top:10px;}
+.fi-signature-wrap img{width:70px;height:auto;}
+.fi-two-col-row{display:flex;justify-content:space-between;width:100%;}
+.fi-col{display:flex;flex-direction:column;flex:1;}
+.fi-data-group{display:flex;flex-direction:column;margin-bottom:20px;}
+.fi-data-group:last-child{margin-bottom:0;}
+.fi-val-flex{display:flex;justify-content:space-between;align-items:flex-start;width:100%;}
+.fi-val-text{font-size:16px;color:#000;font-weight:500;margin-top:4px;line-height:1.3;}
+.fi-status-sub{font-size:13px;color:#8e8e93;margin-top:2px;}
+.fi-qr-card{background:#fff;border-radius:28px;padding:30px 20px;width:100%;display:flex;flex-direction:column;align-items:center;}
+.fi-qr-timer{font-size:14px;color:#8e8e93;margin-bottom:16px;}
+.fi-qr-box{width:220px;height:220px;display:flex;justify-content:center;align-items:center;margin-bottom:24px;}
+.fi-controls-row{display:flex;gap:40px;justify-content:center;width:100%;}
+.placeholder-screen{padding:40px;color:#000;font-weight:600;font-size:22px;}
+
+/* ── SPLASH ── */
+#splash-screen{position:fixed;inset:0;z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#aed4ee,#b8e0d0,#d4e8c0,#b8d4e8);background-size:400% 400%;animation:bgFlow 8s ease infinite;transition:opacity 0.5s ease;}
+#splash-screen.hide{opacity:0;pointer-events:none;}
+@keyframes bgFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.splash-hello{font-size:42px;font-weight:700;color:#111;letter-spacing:-1px; }
+.splash-btns{position:absolute;bottom:60px;display:flex;gap:16px;}
+.splash-btn{width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s;}
+.splash-btn:active{transform:scale(.92);}
+.splash-btn-diia{background:#111;}
+.splash-btn-tryzub{background:transparent;border:2.5px solid rgba(0,0,0,0.35);}
+.splash-home{position:absolute;bottom:12px;width:134px;height:5px;background:rgba(0,0,0,0.22);border-radius:10px;}
+
+/* ── ДІЯ.AI ── */
+#content-ai{display:none;flex-direction:column;height:100%;}
+#content-ai.active{display:flex!important;}
+.ai-header{display:flex;align-items:center;justify-content:space-between;padding:52px 20px 10px;background:transparent;}
+.ai-ticker-bar{background:linear-gradient(90deg,#7b68ee,#9b8fef);padding:7px 0;overflow:hidden;white-space:nowrap;}
+.ai-ticker-in{display:inline-block;animation:marquee 20s linear infinite;font-size:13px;color:#fff;font-weight:500;padding-left:100%;}
+.ai-messages{flex:1;overflow-y:auto;padding:16px 20px 100px;display:flex;flex-direction:column;gap:14px;}
+.ai-msg-bot{display:flex;gap:10px;align-items:flex-start;}
+.ai-bot-icon{width:28px;height:28px;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.ai-bubble-bot{background:transparent;font-size:15px;color:#111;line-height:1.5;max-width:85%;}
+.ai-bubble-bot b{font-weight:600;}
+.ai-divider{height:1px;background:rgba(0,0,0,0.08);margin:4px 0;}
+.ai-date-chip{align-self:center;background:rgba(255,255,255,0.7);border-radius:20px;padding:4px 12px;font-size:13px;color:#666;}
+.ai-actions{display:flex;gap:8px;margin-top:4px;}
+.ai-act-btn{background:none;border:none;cursor:pointer;padding:4px;opacity:0.5;}
+.ai-suggestions{display:flex;flex-direction:column;gap:8px;margin-top:8px;align-self:flex-end;}
+.ai-sug{background:rgba(255,255,255,0.85);border-radius:18px;padding:11px 16px;font-size:15px;color:#111;border:none;cursor:pointer;text-align:left;backdrop-filter:blur(8px);}
+.ai-input-row{position:absolute;bottom:90px;left:0;right:0;padding:10px 16px;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-top:1px solid rgba(0,0,0,0.07);}
+.ai-input-btn{width:44px;height:44px;border-radius:50%;background:#111;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+
+.ai-input-btn-img {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 4px auto;
+}
+
+.ai-input{flex:1;background:rgba(255,255,255,0.9);border:none;border-radius:22px;padding:12px 16px;font-size:15px;color:#111;outline:none;}
+
+/* ── СЕРВІСИ ── */
+.svc-page{padding:52px 16px 100px;}
+.svc-search{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.85);border-radius:14px;padding:11px 16px;margin-bottom:20px;backdrop-filter:blur(8px);}
+.svc-search input{border:none;background:transparent;font-size:16px;color:#111;outline:none;flex:1;}
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.svc-card{background:rgba(255,255,255,0.72);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;cursor:pointer;backdrop-filter:blur(10px);transition:transform .1s;}
+.svc-card:active{transform:scale(.96);}
+.svc-card-ic{width:44px;height:44px;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;}
+.svc-card-nm{font-size:14px;font-weight:500;color:#111;line-height:1.3;}
+
+/* ── МЕНЮ ── */
+.menu-page{padding:52px 16px 100px;overflow-y:auto;}
+.menu-ver{font-size:13px;color:#888;margin-bottom:20px;}
+.menu-grp{background:rgba(255,255,255,0.80);border-radius:18px;overflow:hidden;margin-bottom:12px;backdrop-filter:blur(10px);}
+.menu-row{display:flex;align-items:center;gap:14px;padding:15px 16px;border-bottom:1px solid rgba(0,0,0,0.06);cursor:pointer;}
+.menu-row:last-child{border-bottom:none;}
+.menu-row-ic{width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.menu-row-txt{font-size:16px;font-weight:500;color:#111;}
+.menu-logout{width:100%;padding:16px;background:#111;color:#fff;border:none;border-radius:50px;font-size:17px;font-weight:600;cursor:pointer;margin-bottom:12px;}
+.menu-privacy{display:block;text-align:center;font-size:13px;color:#666;text-decoration:underline;cursor:pointer;}
+
+/* Настройка размера и центрирования картинок в таб-баре */
+.tab-image-icon {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 4px auto;
+  opacity: 0.45; /* Прозрачная, когда не активна */
+  transition: opacity 0.15s ease;
+}
+
+/* Когда нажимаем, картинка становится яркой */
+.tab-item.active .tab-image-icon {
+  opacity: 1 !important;
+}
+
+
+
+
+
+
+/* ====== 1:1 DISCLOSURE MODAL PATTERN FOR CASHBACK ====== */
+
+/* Remove default disclosure arrow */
+.card-cashback-disclosure[open] summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Ensure original button click area is preserved */
+.card-cashback-disclosure summary.card-cashback {
+  list-style: none; /* For Firefox */
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Hide the main-screen when modal is open to mimic screenshot depth */
+#main-screen:has(.card-cashback-disclosure[open]) > .screen-content {
+  overflow: hidden !important; /* Lock scrolling */
+}
+
+/* Modal Overlay: covers everything, absolute to main-screen */
+.cashback-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f0f4f9; /* Matching image_2.png background */
+  z-index: 100; /* Must be below toast but above everything else */
+  overflow-y: auto; /* Allow scrolling inside the modal */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Transition is handled by details[open] state */
+.card-cashback-disclosure[open] .cashback-modal-overlay {
+  display: flex;
+}
+
+/* Prevent other cards from being clicked */
+.flip-card-inner, .feed-content, .home-nezlamnist {
+  z-index: 1;
+}
+
+/* ====== MODAL CONTENT LAYOUT ====== */
+
+.cashback-modal-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  flex: 1;
+}
+
+/* Modal Header (Exact replication) */
+.cashback-modal-content .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 56px 20px 24px; /* Adjust padding-top based on your header section */
+  position: relative;
+}
+
+.modal-back-btn, .modal-more-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-header-title {
+  font-size: 19px;
+  font-weight: 500;
+  color: #111;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.modal-more-btn span {
+  font-size: 10px;
+  color: #111;
+}
+
+/* Scrollable Body area for metadata */
+.modal-body-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 20px;
+  flex: 1;
+}
+
+/* Meta Data Grid and full blocks */
+.meta-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Replicating the card structures inside the modal */
+.meta-block {
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Defining state colors - Re-using and adapting from your style block */
+.meta-block.is-green { 
+  background: linear-gradient(135deg, rgba(195,225,210,0.58) 0%, rgba(170,210,190,0.52) 100%);
+  border-color: rgba(195,225,210,0.6);
+}
+
+.meta-block.is-blue { 
+  background: linear-gradient(135deg, rgba(180,210,235,0.62) 0%, rgba(160,195,220,0.55) 100%);
+  border-color: rgba(180,210,235,0.65);
+}
+
+.meta-block.is-purple { 
+  background: linear-gradient(135deg, rgba(215,200,240,0.58) 0%, rgba(195,175,225,0.52) 100%);
+  border-color: rgba(215,200,240,0.6);
+}
+
+/* Typography inside the blocks */
+.meta-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.meta-label {
+  font-size: 13px;
+  color: #4a535d;
+}
+
+.meta-large-value {
+  font-size: 32px;
+  font-weight: 500;
+  color: #111;
+  letter-spacing: -0.5px;
+}
+
+.meta-sub-value {
+  font-size: 13px;
+  color: #4a535d;
+}
+
+/* Special button inside the blue block */
+.meta-action-btn {
+  width: max-content;
+  background: rgba(255,255,255,0.7);
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #111;
+  border: 1px solid rgba(255,255,255,0.8);
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/* White card pattern - matching service row/full info modal */
+.white-info-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.03);
+  margin-top: 24px;
+  margin-bottom: 80px; /* Spacer for the scan button */
+}
+
+.ua-flag-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.ua-info-title {
+  font-size: 19px;
+  font-weight: 500;
+  color: #111;
+  letter-spacing: -0.3px;
+  margin-bottom: 12px;
+}
+
+.ua-info-desc {
+  font-size: 14px;
+  color: #111;
+  line-height: 1.5;
+  max-width: 90%;
+}
+
+/* Bottom Scan button position pattern */
+.modal-scan-bar-spacer {
+  height: 90px; /* Force scroll area height to show bottom indicator */
+}
+
+.modal-scan-btn {
+  position: absolute;
+  bottom: 120px; /* Aligned above tab-bar */
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: #111;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.meta-icon-row-img {width: 18px;
+  height: 18px;
+  object-fit: contain; 
+  color: #000; 
+  border-radius: 16px;}
+
+
+/* Настройка для самой иконки (картинки) */
+.copy-gadget-number-img {
+  width: 18px !important;
+  height: 18px !important;
+  object-fit: contain; 
+  /* Если у иконки есть фон, это скруглит углы */
+}
+.key-diia-sign-img {
+  width: 20px !important;
+  height: 20px !important;
+  object-fit: contain; 
+}
+
+
+/* Фиксация отображения новых картинок-иконок в сервисах */
+.svc-card-ic img.svc-custom-icon {
+  /* Изменили размер с 22px на 12px, чтобы иконка была меньше и имела отступы */
+  width: 20px !important;
+  height: 20px !important;
+  
+  /* Объединяем transform, чтобы центрировать (если это не flex-контейнер)
+     и масштабировать, если 12px все еще кажется большим */
+  object-fit: contain !important;
+  display: block !important;
+  
+  /* Этот фильтр делает любую черную иконку из интернета чисто белой */
+  filter: invert(100%) brightness(200%) !important; 
+}
+
+
+
+
+
+/* ====== СТИЛИ ДЛЯ СТРАНИЦЫ УПРАВЛЕНИЯ (ИСПРАВЛЕННЫЕ) ====== */
+
+.management-page-card {
+  transform-style: flat !important;
+  background: transparent !important;
+  box-shadow: none !important; /* Убираем тень, чтобы не двоилась */
+  
+  /* ХАК ДЛЯ ТАББАРА: Задаем строго те же размеры, что и у обычного паспорта */
+  width: 100% !important; 
+  max-width: 342px !important;  /* Поставь тут ширину своего паспорта, если она другая (например, 320px) */
+  height: 510px !important;     /* Поставь тут высоту своего паспорта (например, 480px или 500px) */
+  box-sizing: border-box !important;
+  padding: 0 8px !important;    /* Боковые зазоры, чтобы карточка не липла к краям экрана */
+}
+
+.management-layout {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Стеклянные плашки */
+.manage-box {
+  flex: 1 !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 28px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  cursor: pointer !important;
+}
+
+/* Круглые обводки под иконки */
+.manage-icon-circle {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid #111 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Текст под иконками */
+.manage-text {
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  color: #111 !important;
+  letter-spacing: -0.3px !important;
+}
+
+/* Настройка размера для новой PNG-картинки */
+.manage-icon-circle img.manage-png-icon {
+  width: 22px !important;       /* Оптимальный размер иконки внутри круга */
+  height: 22px !important;
+  object-fit: contain !important; /* Защищает картинку от искажения пропорций */
+  display: block !important;
+}
+
+
+
+
+
+
+/* Окно камеры на весь экран */
+.scanner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 9999; /* Поверх всего интерфейса и таббара */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#scanner-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Камера растягивается без искажений */
+}
+
+/* Рамка прицела сканера */
+.scanner-laser-box {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5); /* Затемнение вокруг рамки */
+  overflow: hidden;
+}
+
+/* Анимация бегающей линии лазера */
+.laser-line {
+  width: 100%;
+  height: 3px;
+  background: #00ffff;
+  box-shadow: 0 0 8px #00ffff;
+  position: absolute;
+  animation: laserMove 2s linear infinite;
+}
+
+@keyframes laserMove {
+  0% { top: 0; }
+  50% { top: 100%; }
+  100% { top: 0; }
+}
+
+/* Кнопка закрытия */
+.close-scanner-btn {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+/* Фиксируем оригинальный таббар Дії поверх всех окон */
+.tab-bar, .tabbar, #tabbar, .footer-menu { 
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 9999 !important; /* Гарантирует, что меню будет выше окон чата и документов */
+}
+
+
+
+/* Принудительно показываем таббар всегда */
+.tab-bar {
+  display: flex !important;
+  visibility: visible !important;
+}
+
+
+</style>
+<style>
+  body { padding-top: env(safe-area-inset-top); }
+</style>
+</head>
+<body>
+
+
+<!-- SPLASH -->
+<div id="splash-screen">
+  <div class="splash-hello">Привіт &#x1F44B;</div>
+  <div class="splash-btns">
+    <div class="splash-btn splash-btn-diia-img">
+       <img src="https://play-lh.googleusercontent.com/bncoMFDCd2t_MPM1RqkCWemVcUVtbRWIL_frA_b4K9oa_K7jrTe5j5VhK4EW8RVhzP8j=w240-h480-rw" class=" splash-btn-diia-img " aria-hidden="true" alt="Дія"> 
+    </div>
+    <div class="splash-btn splash-btn-tryzub img">
+      <img src="https://i.postimg.cc/9fw8XFtx/image.png" alt="Герб">
+    </div>
+  </div>
+ 
+</div>
+
+<div id="toast"></div>
+
+<!-- PIN SCREEN -->
+<div id="pin-screen">
+  <div class="header-section">
+    <div class="pin-title">Код для входу</div>
+    <div class="dots-row">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
+  <div class="keyboard">
+    <button class="pin-btn" id="btn1">1</button>
+    <button class="pin-btn" id="btn2">2</button>
+    <button class="pin-btn" id="btn3">3</button>
+    <button class="pin-btn" id="btn4">4</button>
+    <button class="pin-btn" id="btn5">5</button>
+    <button class="pin-btn" id="btn6">6</button>
+    <button class="pin-btn" id="btn7">7</button>
+    <button class="pin-btn" id="btn8">8</button>
+    <button class="pin-btn" id="btn9">9</button>
+   <button class="pin-btn icon-btn" id="FCDbtn" onclick="runNativeBiometrics()"> 
+    <img src="https://www.svgrepo.com/show/503334/face-id.svg">
+</button>
+    <button class="pin-btn" id="btn0">0</button>
+    <button class="pin-btn icon-btn" id="btnDel">
+      <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 8H40C41.1 8 42 8.9 42 10V38C42 39.1 41.1 40 40 40H19C18 40 17.1 39.5 16.6 38.7L6.3 25.3C5.9 24.7 5.9 23.3 6.3 22.7L16.6 9.3C17.1 8.5 18 8 19 8Z" stroke="#000" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+        <line x1="26" y1="19" x2="35" y2="29" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="35" y1="19" x2="26" y2="29" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+  <button class="forgot-btn" id="btnForgot">Не пам'ятаю код для входу</button>
+</div>
+
+<!-- MAIN SCREEN -->
+<div id="main-screen" style="display:none;">
+
+  <!-- FEED -->
+  <div id="content-feed" class="screen-content active">
+    <div class="feed-content">
+      <h1 class="welcome-text" id="feed-welcome"></h1>
+      <div class="card-nezlamnist">
+        <h2 class="card-title">Незламність</h2>
+        <p class="card-desc">Мапа укриттів, Пунктів незламності та відділень Power Banking.<br>Заява про відсутній зв'язок.</p>
+        <div class="card-icons-row">
+          <div class="mini-icon icon-yellow-img">
+            <img src="https://www.svgrepo.com/show/394161/flash.svg" class="mini-icon icon-yellow-img" alt="Flashlight">
+          </div>
+
+          <div class="mini-icon icon-blue-img">
+  <img src="https://www.svgrepo.com/show/535622/shield.svg" class="doc-mini-svg" alt="Shield"/>
+</div>
+
+          <div class="mini-icon icon-green">
+            <img src="https://www.svgrepo.com/show/471127/building-08.svg" class="doc-mini-svg" alt="Building"> 
+          </div>
+        </div>
+        <button class="arrow-btn arrow-black"></button>
+      </div>
+      <div class="quick-services-grid">
+        <div class="service-item" onclick="openDiiaScanner()" style="cursor: pointer;">
+          <div class="service-icon-box">
+            <img src="https://uxwing.com/wp-content/themes/uxwing/download/computers-mobile-hardware/scan-icon.png" style="filter:invert(100%);" alt="Сканер">
+          </div>
+          <span>Дія Сканер</span>
+        </div>
+        
+        <div class="service-item">
+          <div class="service-icon-box">
+            <img src="https://i.postimg.cc/9fw8XFtx/image.png" style="filter:invert(100%) brightness(200%);" alt="Облігації">
+          </div>
+          <span>Військові облігації</span>
+        </div>
+        
+        <div class="service-item">
+          <div class="service-icon-box">
+            <img src="https://www.svgrepo.com/show/532891/tower-broadcast-slash.svg" style="filter:invert(100%);" alt="Зв'язок">
+          </div>
+          <span>Відсутній зв'язок</span>
+        </div>
+      </div>
+      <div class="card-drones-image-wrapper">
+  <img src="https://images.cnscdn.com/f/6/9/8/f69891d4f373da4f692c9e328ffa84ae/original.jpg" onerror="this.style.display='none'" class="banner-img" alt="Лінія Дронів">
+  <p class="drones-floating-text">Змінити хід подій</p>
+  
+  <a href="https://diia.gov.ua/news/podavaite-zaiavky-do-pidrozdilu-raroh-linii-droniv-u-zastosunku-diia" target="_blank" style="z-index:2;">
+    <button class="arrow-btn arrow-white" style="cursor:pointer;"></button>
+  </a>
+</div>
+
+
+
+
+
+      <details class="card-cashback-disclosure">
+        <summary class="card-cashback" data-card-id="national-cashback">
+          <h2 class="cashback-amount" data-text="0.00 грн">0.00 грн</h2>
+          <p class="cashback-desc" id="cashback-month-text"></p>
+          <div class="cashback-lines">
+            <div class="cb-line cb-w8 cb-blue"></div><div class="cb-line cb-w4 cb-blue"></div>
+            <div class="cb-line cb-w8 cb-blue"></div><div class="cb-line cb-w8 cb-yellow"></div>
+            <div class="cb-line cb-w4 cb-yellow"></div><div class="cb-line cb-w8 cb-yellow"></div>
+          </div>
+          <span class="arrow-btn arrow-black"></span>
+        </summary>
+        
+        <div class="cashback-modal-overlay">
+          <div class="cashback-modal-content">
+            <div class="modal-header">
+              <button class="modal-back-btn" onclick="document.querySelector('.card-cashback-disclosure').open = false">
+                <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17 7H1M1 7L7 13M1 7L7 1" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <h3 class="modal-header-title" data-text="Національний кешбек">Національний кешбек</h3>
+              <button class="modal-more-btn" data-text="•••">
+                <span>•</span><span>•</span><span>•</span>
+              </button>
+            </div>
+            
+            <div class="modal-body-layout">
+              <div class="meta-row-grid">
+                <div class="meta-block is-green">
+                  <div class="meta-icon-row">
+                    <img src="https://www.svgrepo.com/show/471278/credit-card-upload.svg"  style="height: 18px; width: auto; object-fit: contain; flex-shrink: 0;" alt="Credit Card"/>
+                    <span class="meta-label" data-text="Виплачено">Виплачено</span>
+                  </div>
+                  <div class="meta-large-value" data-text="0.00">0.00</div>
+                  <div class="meta-sub-value" data-text="за 2026 рік">за 2026 рік</div>
+                </div>
+                
+                <div class="meta-block is-blue">
+                  <div class="meta-icon-row">
+                    <img src="https://www.svgrepo.com/show/471278/credit-card-upload.svg"  style="height: 18px; width: auto; object-fit: contain; flex-shrink: 0;" alt="Credit Card"/>
+                    <span class="meta-label" data-text="Очікує виплати">Очікує виплати</span>
+                  </div>
+                  <div class="meta-large-value" data-text="0.00">0.00</div>
+                  <button class="meta-action-btn" data-text="Вибрати картку">Вибрати картку</button>
+                </div>
+              </div>
+              
+              <div class="meta-block is-purple">
+                <div class="meta-icon-row-img" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <img src="https://www.svgrepo.com/show/331947/shopping-bag.svg" style="height: 18px; width: auto; object-fit: contain; flex-shrink: 0;" alt="Shopping Bag">
+                  <span class="meta-label" data-text="Накопичено за товари">Накопичено за товари</span>
+                </div>
+                <div class="meta-large-value" data-text="0.00">0.00</div>
+                <div class="meta-sub-value" data-text="з 3 000 грн/червень">з 3 000 грн/червень</div>
+              </div>
+              
+              <div class="white-info-card">
+                <div class="ua-flag-icon" data-text="🇺🇦">🇺🇦</div>
+                <h4 class="ua-info-title" data-text="Кешбек ще не нараховано">Кешбек ще не нараховано</h4>
+                <p class="ua-info-desc" data-text="Купуйте українські товари та отримуйте 5% або 15% кешбеку з кожної покупки. Історію нарахувань можна переглянути в Дії.">Купуйте українські товари та отримуйте 5% або 15% кешбеку з кожної покупки. Історію нарахувань можна переглянути в Дії.</p>
+              </div>
+            </div>
+            
+            <div class="modal-scan-bar-spacer"></div>
+            <button class="modal-scan-btn">
+              <img src="https://www.svgrepo.com/show/113432/bar-code.svg" style="width:24px;height:24px; filter:invert(100%); " alt="Barcode">
+            </button>
+          </div>
+        </div>
+      </details>
+
+
+
+
+
+
+
+      <div class="popular-services-section">
+        <h3 class="section-title">Популярні послуги</h3>
+        <div class="services-list-card">
+          <div class="service-row"><span class="service-row-text">Опитування</span><button class="row-arrow-btn"></button></div>
+          <div class="service-row"><span class="service-row-text">Заміна водійського посвідчення</span><button class="row-arrow-btn"></button></div>
+          <div class="service-row"><span class="service-row-text">Податки ФОП</span><button class="row-arrow-btn"></button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   
+<div id="content-documents" class="screen-content">
+    <div class="documents-layout">
+      <div class="carousel-window" id="carousel-window-el">
+        <div class="document-carousel" id="document-carousel-track">
+   
+          <div class="flip-card-inner" data-index="0">
+            <div class="passport-card-front" id="front-0">
+              <h2 class="doc-header-title">Паспорт громадянина<br>України</h2>
+              <div class="doc-main-body">
+                <img class="doc-avatar doc-photo" src="" alt="">
+                <div class="doc-fields">
+                  <div class="field-block"><span class="field-label">Дата народження:</span><span class="field-value doc-dob"></span></div>
+                  <div class="field-block"><span class="field-label">Номер:</span><span class="field-value doc-passport-num"></span></div>
+                  <img class="signature-img doc-signature" src="" alt="Підпис">
+                </div>
+              </div>
+              <div class="doc-status-ticker"><div class="ticker-wrap fi-ticker-target"></div></div>
+              <div class="doc-footer">
+                <div class="doc-name-block">
+                  <span class="doc-last-name doc-lastname"></span>
+                  <span class="doc-first-name doc-firstname"></span>
+                  <span class="doc-first-name doc-patronymic"></span>
+                </div>
+                <button class="doc-menu-btn" data-cardidx="0"></button>
+              </div>
+            </div>
+            <div class="passport-card-back" id="back-0">
+              <div class="back-tap-zone" data-cardidx="0">
+                <div class="timer-text countdown-timer-el">Код діятиме ще 2:59 хв</div>
+                <div class="code-display-container">
+                  <div class="qrcode-box" id="qrcode-0"></div>
+                  <svg class="barcode-box" id="barcode-0"></svg>
+                </div>
+                <div class="back-controls-row">
+                  <div class="control-item" data-type="qr" data-cardidx="0">
+                    <button class="control-btn-circle btn-black qr-btn-el"><img src="https://www.svgrepo.com/show/365672/qr-code-thin.svg" style="width:24px;height:24px;filter:invert(100%);" alt="QR"></button>
+                    <span>QR-код</span>
+                  </div>
+                  <div class="control-item" data-type="bar" data-cardidx="0">
+                    <button class="control-btn-circle btn-gray bar-btn-el"><img src="https://www.svgrepo.com/show/113432/bar-code.svg" style="width:24px;height:24px;" alt="Barcode"></button>
+                    <span>Штрихкод</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card-inner" data-index="1">
+            <div class="passport-card-front card-foreign" id="front-1">
+              <h2 class="doc-header-title" data-uk="Паспорт для виїзду за кордон" data-en="International Passport">Закордонний<br>паспорт</h2>
+              <div class="doc-main-body">
+                <img class="doc-avatar doc-photo" src="" alt="">
+                <div class="doc-fields">
+                  <div class="field-block">
+                    <span class="field-label" data-uk="Номер документа:" data-en="Document No:">Номер документа:</span>
+                    <span class="field-value doc-foreign-num"></span>
+                  </div>
+                  <div class="field-block">
+                    <span class="field-label" data-uk="Строк дії:" data-en="Expiry date:">Строк дії:</span>
+                    <span class="field-value doc-foreign-expiry"></span>
+                    </div>
+                  <img class="signature-img doc-signature" src="" alt="Підпис">
+                </div>
+              </div>
+              <div class="doc-status-ticker"><div class="ticker-wrap fi-ticker-target"></div></div>
+              <div class="doc-footer">
+                <div class="doc-name-block">
+                  <span class="doc-last-name" data-uk="" data-en=""></span>
+                  <span class="doc-first-name" data-uk="" data-en=""></span>
+                  <span class="doc-first-name doc-patronymic" data-uk="" data-en=" "></span>
+                </div>
+                <button class="doc-menu-btn" data-cardidx="1"></button>
+              </div>
+            </div>
+            <div class="passport-card-back" id="back-1">
+              <div class="back-tap-zone" data-cardidx="1">
+                <div class="timer-text countdown-timer-el">Код діятиме ще 2:59 хв</div>
+                <div class="code-display-container">
+                  <div class="qrcode-box" id="qrcode-1"></div>
+                  <svg class="barcode-box" id="barcode-1"></svg>
+                </div>
+                <div class="back-controls-row">
+                  <div class="control-item" data-type="qr" data-cardidx="1">
+                    <button class="control-btn-circle btn-black qr-btn-el"><img src="https://www.svgrepo.com/show/365672/qr-code-thin.svg" style="width:24px;height:24px;filter:invert(100%);" alt="QR"></button>
+                    <span>QR-код</span>
+                  </div>
+                  <div class="control-item" data-type="bar" data-cardidx="1">
+                    <button class="control-btn-circle btn-gray bar-btn-el"><img src="https://www.svgrepo.com/show/113432/bar-code.svg" style="width:24px;height:24px;" alt="Barcode"></button>
+                    <span>Штрихкод</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card-inner" data-index="2">
+            <div class="passport-card-front card-rnokpp" id="front-2">
+              <h2 class="doc-header-title">Картка платника<br>податків</h2>
+             <div class="doc-main-body">
+                <div class="doc-fields" style="gap:0;">
+                  <div class="field-block">
+                    <span class="field-label">РНОКПП:</span>
+                  </div>
+                  <div class="field-block" style="margin-top: 24px; display: flex; flex-direction: column; gap: 4px;">
+                    <span class="doc-last-name doc-lastname"></span>
+                    <span class="doc-first-name doc-fn-pat" style="display: block; white-space: pre-line; font-size: 19px; font-weight: 500;"></span>
+                  </div>
+                  <div class="field-block" style="margin-top: 16px;">
+                    <span class="field-label" style="display: block; margin-bottom: 2px;">Дата народження:</span>
+                    <span class="field-value doc-dob" style="display: block;"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="doc-status-ticker"><div class="ticker-wrap fi-ticker-target"></div></div>
+              <div class="doc-footer" style="align-items: center;">
+                <div class="field-block">
+                  <span class="field-value doc-rnokpp" style="font-size: 26px; font-weight: 700; letter-spacing: 0.5px;"></span>
+                </div>
+                <div class="doc-name-block" style="display: none !important;">
+                  <span class="doc-last-name doc-lastname"></span>
+                  <span class="doc-first-name doc-fn-pat"></span>
+                </div>
+                <button class="doc-menu-btn" data-cardidx="2"></button>
+              </div>
+            </div>
+            <div class="passport-card-back" id="back-2">
+              <div class="back-tap-zone" data-cardidx="2">
+                <div class="timer-text countdown-timer-el">Код діятиме ще 2:59 хв</div>
+                <div class="code-display-container">
+                  <div class="qrcode-box" id="qrcode-2"></div>
+                  <svg class="barcode-box" id="barcode-2"></svg>
+                </div>
+                <div class="back-controls-row">
+                  <div class="control-item" data-type="qr" data-cardidx="2">
+                    <button class="control-btn-circle btn-black qr-btn-el"><img src="https://www.svgrepo.com/show/365672/qr-code-thin.svg" style="width:24px;height:24px;filter:invert(100%);" alt="QR"></button>
+                    <span>QR-код</span>
+                  </div>
+                  <div class="control-item" data-type="bar" data-cardidx="2">
+                    <button class="control-btn-circle btn-gray bar-btn-el"><img src="https://www.svgrepo.com/show/113432/bar-code.svg" style="width:24px;height:24px;" alt="Barcode"></button>
+                    <span>Штрихкод</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card-inner" data-index="3">
+  <div class="passport-card-front card-driver" id="front-3">
+    <h2 class="doc-header-title" data-uk="Посвідчення водія" data-en="Driving License">Посвідчення водія</h2>
+    <div class="doc-main-body">
+      <img class="doc-avatar doc-photo" src="" alt="">
+      <div class="doc-fields">
+
+        <div class="field-block">
+          <span class="field-label" data-uk="Дата народження:" data-en="Date of birth:">Дата народження:</span>
+          <span class="field-value doc-dob"></span>
+        </div>
+
+        <div class="field-block">
+          <span class="field-label" data-uk="Категорія:" data-en="Category:">Категорія:</span>
+          <span class="field-value doc-driver-cat"></span>
+        </div>
+
+        <div class="field-block">
+          <span class="field-label" data-uk="Номер документа:" data-en="Document No:">Номер<br>документа:</span>
+          <span class="field-value doc-driver-num"></span>
+        </div>
+
+      </div>
+    </div>
+    <div class="doc-status-ticker"><div class="ticker-wrap fi-ticker-target"></div></div>
+    <div class="doc-footer">
+      <div class="doc-name-block">
+        <span class="doc-last-name" data-uk="" data-en=""></span>
+        <span class="doc-first-name" data-uk="" data-en=""></span>
+      </div>
+      <button class="doc-menu-btn" data-cardidx="3"></button>
+    </div>
+  </div>
+            <div class="passport-card-back" id="back-3">
+              <div class="back-tap-zone" data-cardidx="3">
+                <div class="timer-text countdown-timer-el">Код діятиме ще 2:59 хв</div>
+                <div class="code-display-container">
+                  <div class="qrcode-box" id="qrcode-3"></div>
+                  <svg class="barcode-box" id="barcode-3"></svg>
+                </div>
+                <div class="back-controls-row">
+                  <div class="control-item" data-type="qr" data-cardidx="3">
+                    <button class="control-btn-circle btn-black qr-btn-el"><img src="https://www.svgrepo.com/show/365672/qr-code-thin.svg" style="width:24px;height:24px;filter:invert(100%);" alt="QR"></button>
+                    <span>QR-код</span>
+                  </div>
+                  <div class="control-item" data-type="bar" data-cardidx="3">
+                    <button class="control-btn-circle btn-gray bar-btn-el"><img src="https://www.svgrepo.com/show/113432/bar-code.svg" style="width:24px;height:24px;" alt="Barcode"></button>
+                    <span>Штрихкод</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card-inner" data-index="4">
+            <div class="passport-card-front card-edoc" id="front-4">
+              <h2 class="doc-header-title">єДокумент</h2>
+              <div class="doc-main-body">
+                <img class="doc-avatar doc-photo" src="" alt="">
+                <div class="doc-fields" style="gap: 12px;">
+                  <div class="field-block">
+                    <span class="field-label">Дата народження:</span>
+                    <span class="field-value doc-dob" style="display: block; margin-top: 2px;"></span>
+                  </div>
+                  <div class="field-block">
+                    <span class="field-label">РНОКПП:</span>
+                    <span class="field-value doc-rnokpp"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="doc-status-ticker">
+                <div class="ticker-wrap" style="animation: marquee 40s linear infinite;">
+                  <span class="ticker-text"> Документ діє під час воєнного стану    •    Ой у лузі червона калина похилилася, чогось наша славна Україна зажурилася, а ми тую червону калину підіймемо, а ми нашу славну Україну, гей, гей, розвеселимо!    •    Документ діє під час воєнного стану    •    Ой у лузі червона калина похилилася, чогось наша славна Україна зажурилася, а ми тую червону калину підіймемо, а ми нашу славну Україну, гей, гей, розвеселимо! •</span>
+                </div>
+              </div>
+              <div class="doc-footer">
+                <div class="doc-name-block">
+                  <span class="doc-last-name doc-lastname"></span>
+                  <span class="doc-first-name doc-fn-pat"></span>
+                </div>
+                <button class="doc-menu-btn" data-cardidx="4"></button>
+              </div>
+            </div>
+            <div class="passport-card-back" id="back-4">
+              <div class="back-tap-zone" data-cardidx="4">
+                <div class="timer-text countdown-timer-el">Код діятиме ще 2:59 хв</div>
+                <div class="code-display-container">
+                  <div class="qrcode-box" id="qrcode-4"></div>
+                  <svg class="barcode-box" id="barcode-4"></svg>
+                </div>
+                <div class="back-controls-row">
+                  <div class="control-item" data-type="qr" data-cardidx="4">
+                    <button class="control-btn-circle btn-black qr-btn-el"><img src="https://www.svgrepo.com/show/365672/qr-code-thin.svg" style="width:24px;height:24px;filter:invert(100%);" alt="QR"></button>
+                    <span>QR-код</span>
+                  </div>
+                  <div class="control-item" data-type="bar" data-cardidx="4">
+                    <button class="control-btn-circle btn-gray bar-btn-el"><img src="https://www.svgrepo.com/show/113432/bar-code.svg" style="width:24px;height:24px;" alt="Barcode"></button>
+                    <span>Штрихкод</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card-inner management-page-card" data-index="5">
+            <div class="management-layout">
+              <div class="manage-box">
+                <div class="manage-icon-circle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+                <span class="manage-text">Додати документ</span>
+              </div>
+              <div class="manage-box">
+                <div class="manage-icon-circle">
+                  <img src="https://www.svgrepo.com/show/363301/arrows-left-right-duotone.svg" class="manage-png-icon" alt="reorder">
+                </div>
+                <span class="manage-text">Змінити порядок документів</span>
+              </div>
+            </div>
+          </div>
+
+        </div> </div> <div class="carousel-dots" id="dots-container-el">
+        <div class="c-dot active" data-jump="0"></div>
+        <div class="c-dot" data-jump="1"></div>
+        <div class="c-dot" data-jump="2"></div>
+        <div class="c-dot" data-jump="3"></div>
+        <div class="c-dot" data-jump="4"></div>
+        <div class="c-dot" data-jump="5"></div> 
+      </div>
+
+    </div> </div> 
+
+
+
+  <!-- СЕРВІСИ -->
+  <div id="content-services" class="screen-content">
+    <div class="svc-page">
+      <h1 style="font-size:30px;font-weight:800;color:#111;margin-bottom:18px;">Сервіси</h1>
+      <div class="svc-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="Пошук">
+      </div>
+      <div class="svc-grid" id="svc-grid"></div>
+    </div>
+  </div>
+
+  <!-- ДІЯ.AI -->
+  <div id="content-ai" class="screen-content">
+    <div class="ai-header">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </div>
+    <div class="ai-ticker-bar"><span class="ai-ticker-in">Працюю в тестовому режимі &bull; Працюю в тестовому режимі &bull; Працюю в тестовому режимі &bull;  Працюю в тестовому режимі &bull; &nbsp;</span></div>
+    <div class="ai-messages">
+      <div class="ai-date-chip current-date-el">31.05.2026</div>
+      <div class="ai-msg-bot">
+        <div class="ai-bot-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2l3 7h7l-6 4 2 7-6-4-6 4 2-7-6-4h7z" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="ai-bubble-bot"><b>Подбайте про свою безпеку.</b><div class="ai-divider"></div>Ви можете переглянути найближчі Пункти незламності з електрикою та зв'язком на інтерактивній мапі.</div>
+          <div class="ai-actions">
+            <button class="ai-act-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg></button>
+            <button class="ai-act-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0122 4v7a2.31 2.31 0 01-2.33 2H17"/></svg></button>
+            <button class="ai-act-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+          </div>
+          <div style="font-size:14px;color:#666;margin-top:6px;">Розповісти деталі?</div>
+          <div class="ai-suggestions">
+            <button class="ai-sug">Чи можна користуватись мапою офлайн?</button>
+            <button class="ai-sug">Як знайти укриття поруч?</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ai-input-row">
+      <div class="ai-input-btn-img">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Google_Gemini_icon_2025.svg/1280px-Google_Gemini_icon_2025.svg.png" class="ai-input-btn-img"  alt="ai-input-btn">
+      </div>
+      <input class="ai-input" type="text" placeholder="Чим можу допомогти?">
+    </div>
+  </div>
+
+  <!-- МЕНЮ -->
+  <div id="content-menu" class="screen-content">
+    <div class="menu-page">
+      <h1 style="font-size:30px;font-weight:800;color:#111;margin-bottom:4px;">Меню</h1>
+      <div class="menu-ver">Версія Дії: 4.34.0.2621</div>
+
+      <div class="menu-grp">
+        <div class="menu-row"><div class="menu-row-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="menu-row-txt">Повідомлення</div></div>
+      </div>
+
+      <div class="menu-grp">
+        <div class="menu-row"><div class="menu-row-ic"><img src="https://www.svgrepo.com/show/347070/key.svg" class="key-diia-sign-img"  alt="key-diia-sign-img"></div><div class="menu-row-txt">Дія.Підпис</div></div>
+        <div class="menu-row"><div class="menu-row-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="menu-row-txt">Історія підписань</div></div>
+      </div>
+
+      <div class="menu-grp">
+        <div class="menu-row"><div class="menu-row-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div><div class="menu-row-txt">Налаштування</div></div>
+        <div class="menu-row"><div class="menu-row-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg></div><div class="menu-row-txt">Оновити застосунок</div></div>
+        <div class="menu-row"><div class="menu-row-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5"/></svg></div><div class="menu-row-txt">Підключені пристрої</div></div>
+      </div>
+
+      <div class="menu-grp">
+        <div class="menu-row"><div class="menu-row-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="menu-row-txt">Служба підтримки</div></div>
+        <div class="menu-row" onclick="copyToClipboard('DEVICE-' + Math.random().toString(36).substr(2,9).toUpperCase())"><div class="menu-row-ic"><img src="https://www.svgrepo.com/show/488886/copy-2.svg" class="copy-gadget-number-img" alt="copy-gadget-number-img "/></div><div class="menu-row-txt">Копіювати номер пристрою</div></div>
+        <div class="menu-row"><div class="menu-row-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2.5"/></svg></div><div class="menu-row-txt">Питання та відповіді</div></div>
+      </div>
+      <button class="menu-logout" onclick="doLogout()">Вийти</button>
+      <a class="menu-privacy">Повідомлення про обробку персональних даних</a>
+    </div>
+  </div>
+
+
+  <!-- BOTTOM SHEET -->
+  <div id="sheet-overlay">
+    <div class="bottom-sheet-container">
+      <div class="sheet-main-box">
+        <button class="sheet-menu-item" id="sheet-fullinfo-btn">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2.5"/></svg>
+          <span>Повна інформація</span>
+        </button>
+        <button class="sheet-menu-item">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Витяг про місце проживання</span>
+        </button>
+        <button class="sheet-menu-item">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Оцінити документ</span>
+        </button>
+        <button class="sheet-menu-item" id="sheet-translate-btn" style="display:none;">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          <span id="sheet-translate-label">Перекласти на англійську</span>
+        </button>
+        <button class="sheet-menu-item">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+          <span>Змінити порядок документів</span>
+        </button>
+        <button class="sheet-menu-item">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2.5"/></svg>
+          <span>Питання та відповіді</span>
+        </button>
+        <div class="sheet-codes-row">
+          <button class="sheet-code-btn-wrapper" id="sheet-qr-btn">
+            <div class="sheet-circle-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="15" y="2" width="7" height="7" rx="1"/><rect x="2" y="15" width="7" height="7" rx="1"/><rect x="15" y="15" width="3" height="3"/><rect x="19" y="15" width="3" height="3"/><rect x="15" y="19" width="3" height="3"/><rect x="19" y="19" width="3" height="3"/><rect x="4" y="4" width="3" height="3" fill="white"/><rect x="17" y="4" width="3" height="3" fill="white"/><rect x="4" y="17" width="3" height="3" fill="white"/></svg></div>
+            <span>QR-код</span>
+          </button>
+          <button class="sheet-code-btn-wrapper" id="sheet-bar-btn">
+            <div class="sheet-circle-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="4" y1="3" x2="4" y2="21"/><line x1="7" y1="3" x2="7" y2="21"/><line x1="10" y1="3" x2="10" y2="21"/><line x1="13" y1="3" x2="13" y2="21"/><line x1="16" y1="3" x2="16" y2="21"/><line x1="19" y1="3" x2="19" y2="21" stroke-width="3"/></svg></div>
+            <span>Штрихкод</span>
+          </button>
+        </div>
+      </div>
+      <button class="sheet-close-btn" id="sheet-close-btn">Закрити</button>
+    </div>
+  </div>
+
+  <!-- FULL INFO MODAL -->
+  <div id="full-info-screen" class="full-info-modal">
+    <div class="fi-header-panel" id="fi-header-trigger">
+      <div class="fi-drag-handle"></div>
+      <div class="fi-main-title" id="fi-title"></div>
+      <div class="fi-number-box">
+        <span class="fi-passport-num" id="fi-main-num"></span>
+        <button class="fi-copy-btn" id="fi-copy-num-btn"><img src="https://www.svgrepo.com/show/488886/copy-2.svg" alt="Copy "/></button>
+      </div>
+      <div class="fi-ticker-line"><div class="ticker-wrap fi-ticker-target"></div></div>
+      <button class="fi-back-btn" id="fi-close-btn">    </button>
+    </div>
+    <div class="fi-scroll-content" id="fi-scroll-content"></div>
+  </div>
+
+  <div class="tab-bar">
+  <button class="tab-item active" data-tab="feed">
+    <img src="https://www.svgrepo.com/show/524537/feed.svg" class="tab-image-icon" alt="Стрічка">  
+    <span>Стрічка</span>
+  </button>
+  
+  <button class="tab-item" data-tab="documents">
+    <img src="https://www.svgrepo.com/show/524029/document.svg" class="tab-image-icon" alt="Документи">
+    <span>Документи</span>
+  </button>
+  
+  <button class="tab-item" data-tab="ai">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Google_Gemini_icon_2025.svg/1280px-Google_Gemini_icon_2025.svg.png" class="tab-image-icon"  alt="Дія.AI">
+    <span>Дія.AI</span>
+  </button>
+  
+  <button class="tab-item" data-tab="services">
+    <img src="https://www.svgrepo.com/show/394161/flash.svg" class="tab-image-icon" alt="Сервіси">
+    <span>Сервіси</span>
+  </button>
+  
+  <button class="tab-item" data-tab="menu">
+    <img src="https://www.svgrepo.com/show/497407/profile-circle.svg" class="tab-image-icon" alt="Меню">
+    <span>Меню</span>
+  </button>
+  
+  <div class="home-indicator"></div>
+</div>
+</div>
+
+
+
+<div id="scanner-screen" class="scanner-overlay" style="display: none;">
+  <video id="scanner-video" autoplay playsinline></video>
+  
+  <div class="scanner-laser-box">
+    <div class="laser-line"></div>
+  </div>
+
+  <button class="close-scanner-btn" onclick="closeDiiaScanner()">✕</button>
+</div>
+
+
+<!-- Бібліотеки в кінці body — гарантовано завантажуються після DOM -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+<script>
+/* ================================================================
+   ЦЕНТРАЛЬНЕ СХОВИЩЕ — ЗМІНЮЙТЕ ТІЛЬКИ ТУТ
+================================================================ */
+var USER = {
+  firstName: 'ГРИГОРІЙ',
+  lastName:       'САМОЙЛЕНКО',
+  patronymic:     'ІВАНОВИЧ',
+  firstNameEn:    'HRYHORII',
+  lastNameEn:     'SAMOILENKO',
+  dob:            '10.08.1999',
+  photoUA:        'https://i.postimg.cc/wjhc1JFq/image.png',   /* ← ТУТ міняй фото паспорта України (URL або base64) */
+  photoIntl:      'https://i.postimg.cc/W3972v8f/image.png',   /* ← ТУТ міняй фото закордонного паспорта */
+  photoDL:        'https://i.postimg.cc/W3972v8f/image.png',   /* ← ТУТ міняй фото водійських прав */
+  photo:          'https://i.postimg.cc/wjhc1JFq/image.png',   /* ← ТУТ міняй фото єДокументу */
+  signature:      'https://i.postimg.cc/8cmNFZFw/image.png',
+  sex:            'Ч', sexEn: 'M',
+  nationality:    'Україна', nationalityEn: 'Ukraine',
+  placeOfBirth:   'М. ГОРЛІВКА, ЦЕНТРАЛЬНО-МІСЬКИЙ РАЙОН, ДОНЕЦЬКА ОБЛАСТЬ, УКРАЇНА',
+  address:        'УКРАЇНА М. ГОРЛІВКА, ЦЕНТРАЛЬНО-МІСЬКИЙ РАЙОН, ДОНЕЦЬКА ОБЛАСТЬ, ВУЛ. ПУШКІНСЬКА БУД. 30 КВ. 4', 
+  addressReg:     '14.12.2004',
+  passportNum:    '009765996',
+  passportIssue:  '06.10.2023',
+  passportExpiry: '06.10.2033',
+  passportAuth:   '1222',
+  unzr:           '19990810-10471',
+  foreignPassNum: 'GF385305',
+  foreignIssue:  '03.05.2024',
+  foreignExpiry:  '03.05.2034',
+  rnokpp:         '3638101113', 
+  driverLicNum:   'ВHB 915311',
+  driverCats:     'B',
+  driverCatDate:  '21.04.2026',
+  driverAuthority:'ТСЦ 1406',
+  driverIssue:    '21.04.2026',
+  driverExpiry:   '21.04.2056',
+  taxVerifiedDate:'21.09.2026'
+
+};
+/* ================================================================ */
+
+var currentPin = [];
+var currentCardIndex = 0;
+var totalCards = 6;
+var timerInterval = null;
+var totalSeconds = 179;
+var codesGenerated = {};
+var activeSheetCardIdx = 0;
+var cardLang = {1:'uk', 3:'uk'};
+
+/* ---- Заповнення даних ---- */
+function populateUserData() {
+  var el = document.getElementById('feed-welcome');
+  if (el) el.textContent = 'Привіт, ' + USER.firstName + ' \uD83D\uDC4B';
+
+  var months = ['січень','лютий','березень','квітень','травень','червень','липень','серпень','вересень','жовтень','листопад','грудень'];
+  var cm = document.getElementById('cashback-month-text');
+  if (cm) cm.textContent = 'Накопичено кешбеку за ' + months[new Date().getMonth()];
+
+  /* Різні фото для різних карток */
+  var photoMap = {0: USER.photoUA, 1: USER.photoIntl, 2: null, 3: USER.photoDL, 4: USER.photo};
+  document.querySelectorAll('.flip-card-inner').forEach(function(card){
+    var idx2 = parseInt(card.dataset.index);
+    var ph = card.querySelector('.doc-photo');
+    if (ph && photoMap[idx2]) { ph.src = photoMap[idx2]; ph.alt = USER.firstName; }
+  });
+  document.querySelectorAll('.doc-signature').forEach(function(img){ img.src = USER.signature; });
+  document.querySelectorAll('.doc-dob').forEach(function(el){ el.textContent = USER.dob; });
+  document.querySelectorAll('.doc-passport-num').forEach(function(el){ el.textContent = USER.passportNum; });
+  document.querySelectorAll('.doc-lastname').forEach(function(el){ el.textContent = USER.lastName; });
+  document.querySelectorAll('.doc-firstname').forEach(function(el){ el.textContent = USER.firstName; });
+  document.querySelectorAll('.doc-patronymic').forEach(function(el){ el.textContent = USER.patronymic; });
+  document.querySelectorAll('.doc-fn-pat').forEach(function(el){ el.textContent = USER.firstName + ' ' + USER.patronymic; });
+  document.querySelectorAll('.doc-foreign-num').forEach(function(el){ el.textContent = USER.foreignPassNum; });
+  document.querySelectorAll('.doc-foreign-expiry').forEach(function(el){ el.textContent = USER.foreignExpiry; });
+  document.querySelectorAll('.doc-rnokpp').forEach(function(el){ el.textContent = USER.rnokpp; });
+  document.querySelectorAll('.doc-driver-num').forEach(function(el){ el.textContent = USER.driverLicNum; });
+  document.querySelectorAll('.doc-driver-cat').forEach(function(el){ el.textContent = USER.driverCats; });
+
+  /* Картка 1 — прізвище/ім'я для перекладу */
+  var f1 = document.getElementById('front-1');
+  if (f1) {
+    var ln1 = f1.querySelector('.doc-last-name');
+    var fn1 = f1.querySelector('.doc-first-name');
+    if (ln1) { ln1.dataset.uk = USER.lastName; ln1.dataset.en = USER.lastNameEn; ln1.textContent = USER.lastName; }
+    if (fn1) { fn1.dataset.uk = USER.firstName; fn1.dataset.en = USER.firstNameEn; fn1.textContent = USER.firstName; }
+  }
+  /* Картка 3 — права */
+  var f3 = document.getElementById('front-3');
+  if (f3) {
+    var ln3 = f3.querySelector('.doc-last-name');
+    var fn3 = f3.querySelector('.doc-first-name');
+    if (ln3) { ln3.dataset.uk = USER.lastName; ln3.dataset.en = USER.lastNameEn; ln3.textContent = USER.lastName; }
+    if (fn3) { fn3.dataset.uk = USER.firstName + ' ' + USER.patronymic; fn3.dataset.en = USER.firstNameEn; fn3.textContent = USER.firstName + ' ' + USER.patronymic; }
+  }
+}
+
+
+// Автоматическое выставление актуальной даты для ДІЯ.AI
+function updateAiPageDate() {
+  const dateElement = document.querySelector('.current-date-el');
+  if (dateElement) {
+    const today = new Date();
+    
+    // Форматируем день и месяц, чтобы всегда было две цифры (например, 04, а не 4)
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Месяцы в JS идут с 0 до 11
+    const year = today.getFullYear();
+    
+    // Собираем в привычный формат ДД.ММ.ГГГГ
+    dateElement.textContent = `${day}.${month}.${year}`;
+  }
+}
+
+// Запускаем обновление сразу при загрузке страницы
+document.addEventListener('DOMContentLoaded', updateAiPageDate);
+
+
+/* ---- Тікер ---- */
+function updateTickerTime() {
+  var now = new Date();
+  var hh = String(now.getHours()).padStart(2,'0');
+  var mm = String(now.getMinutes()).padStart(2,'0');
+  var dd = String(now.getDate()).padStart(2,'0');
+  var mo = String(now.getMonth()+1).padStart(2,'0');
+  var yr = now.getFullYear();
+  var text = ('Документ оновлено о ' + hh + ':' + mm + ' | ' + dd + '.' + mo + '.' + yr + ' \u2022 ').repeat(6);
+  document.querySelectorAll('.fi-ticker-target').forEach(function(el){
+    el.innerHTML = '<span class="ticker-text">' + text + '</span>';
+  });
+}
+
+/* ---- PIN ---- */
+function pressNum(num) {
+  if (currentPin.length < 4) {
+    currentPin.push(num);
+    updateDots();
+  }
+
+  // Проверяем, ввели ли мы ровно 4 цифры
+  if (currentPin.length === 4) {
+    
+    // Получаем правильный PIN из localStorage или используем стандартный 1111
+    var saved = localStorage.getItem('user_app_pin');
+    var correctPin = saved ? JSON.parse(saved) : [1,9,9,9];
+
+    // Сравниваем то, что ввел юзер, с правильным кодом
+    if (JSON.stringify(currentPin) === JSON.stringify(correctPin)) {
+      // PIN ВЕРНЫЙ
+      setTimeout(function(){
+        document.getElementById('pin-screen').style.display = 'none';
+        document.getElementById('main-screen').style.display = 'flex';
+        populateUserData();
+        updateTickerTime();
+        resetAndStartTimer();
+      }, 200);
+    } else {
+      // PIN НЕВЕРНЫЙ
+      alert('Невірний PIN-код!');
+      // Сбрасываем всё, чтобы человек попробовал еще раз
+      currentPin = [];
+      updateDots();
+    }
+  }
+}
+function deleteNum() {
+  currentPin.pop();
+  updateDots();
+}
+function updateDots() {
+  document.querySelectorAll('.dot').forEach(function(dot, idx){
+    dot.classList.toggle('active', idx < currentPin.length);
+  });
+}
+
+/* ---- TABS ---- */
+document.querySelectorAll('.tab-item').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var tab = btn.dataset.tab;
+    document.querySelectorAll('.screen-content').forEach(function(el){ el.classList.remove('active'); });
+    document.querySelectorAll('.tab-item').forEach(function(el){ el.classList.remove('active'); });
+    document.getElementById('content-' + tab).classList.add('active');
+    btn.classList.add('active');
+    if(tab==='services') renderServices();
+
+  });
+});
+
+/* ---- CAROUSEL ---- */
+var carouselTrack = document.getElementById('document-carousel-track');
+
+function getCardWidth() {
+  var card = carouselTrack.querySelector('.flip-card-inner');
+  return card ? card.offsetWidth + 20 : 362;
+}
+function jumpToCard(index) {
+  currentCardIndex = index;
+  carouselTrack.style.transform = 'translateX(-' + (index * getCardWidth()) + 'px)';
+  document.querySelectorAll('#dots-container-el .c-dot').forEach(function(d, i){
+    d.classList.toggle('active', i === index);
+  });
+}
+
+document.querySelectorAll('#dots-container-el .c-dot').forEach(function(dot){
+  dot.addEventListener('click', function(){ jumpToCard(parseInt(dot.dataset.jump)); });
+});
+
+var carouselWin = document.getElementById('carousel-window-el');
+var touchStartX = 0;
+carouselWin.addEventListener('touchstart', function(e){ touchStartX = e.changedTouches[0].screenX; }, {passive:true});
+carouselWin.addEventListener('touchend', function(e){
+  var diff = touchStartX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0 && currentCardIndex < totalCards - 1) jumpToCard(currentCardIndex + 1);
+    if (diff < 0 && currentCardIndex > 0) jumpToCard(currentCardIndex - 1);
+  }
+}, {passive:true});
+
+/* ---- FLIP — делегування подій ---- */
+document.getElementById('document-carousel-track').addEventListener('click', function(e){
+  /* Кнопка меню */
+  var menuBtn = e.target.closest('.doc-menu-btn');
+  if (menuBtn) { e.stopPropagation(); openBottomSheet(parseInt(menuBtn.dataset.cardidx)); return; }
+
+  /* Перемикач QR/Bar */
+  var ctrlItem = e.target.closest('.control-item[data-type]');
+  if (ctrlItem) { e.stopPropagation(); setActiveCode(parseInt(ctrlItem.dataset.cardidx), ctrlItem.dataset.type); return; }
+
+  /* Клік по передній стороні картки */
+  var front = e.target.closest('.passport-card-front');
+  if (front) { flipCard(front.closest('.flip-card-inner')); return; }
+
+  /* Клік по задній стороні */
+  var backZone = e.target.closest('.back-tap-zone');
+  if (backZone) { flipCard(backZone.closest('.flip-card-inner')); return; }
+});
+
+function flipCard(cardInner) {
+  if (!cardInner) return;
+  cardInner.classList.toggle('flipped');
+  var idx = parseInt(cardInner.dataset.index);
+  if (cardInner.classList.contains('flipped')) {
+    generateCodesForIndex(idx);
+    resetAndStartTimer();
+  }
+}
+
+/* ---- QR & BARCODE ---- */
+function generateCodesForIndex(idx) {
+  if (codesGenerated[idx]) return;
+  var qrBox = document.getElementById('qrcode-' + idx);
+  if (qrBox && typeof QRCode !== 'undefined') {
+    qrBox.innerHTML = '';
+    new QRCode(qrBox, {text:'https://diia.gov.ua', width:170, height:170, colorDark:'#000', colorLight:'#fff', correctLevel:QRCode.CorrectLevel.H});
+  }
+  var barEl = document.getElementById('barcode-' + idx);
+  if (barEl && typeof JsBarcode !== 'undefined') {
+    JsBarcode('#barcode-' + idx, USER.passportNum, {format:'CODE128', width:2, height:75, displayValue:true, fontSize:14, lineColor:'#000', background:'#fff'});
+    barEl.style.display = 'none';
+  }
+  codesGenerated[idx] = true;
+}
+
+function setActiveCode(idx, type) {
+  var cardInner = document.querySelectorAll('.flip-card-inner')[idx];
+  if (!cardInner) return;
+  var qrDiv = cardInner.querySelector('.qrcode-box');
+  var barSvg = cardInner.querySelector('.barcode-box');
+  var qrBtn = cardInner.querySelector('.qr-btn-el');
+  var barBtn = cardInner.querySelector('.bar-btn-el');
+  if (type === 'qr') {
+    qrDiv.style.display = 'flex'; barSvg.style.display = 'none';
+    qrBtn.className = 'control-btn-circle btn-black qr-btn-el';
+    barBtn.className = 'control-btn-circle btn-gray bar-btn-el';
+  } else {
+    qrDiv.style.display = 'none'; barSvg.style.display = 'block';
+    qrBtn.className = 'control-btn-circle btn-gray qr-btn-el';
+    barBtn.className = 'control-btn-circle btn-black bar-btn-el';
+  }
+}
+
+/* ---- TIMER ---- */
+function resetAndStartTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  totalSeconds = 179;
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    totalSeconds--;
+    if (totalSeconds < 0) totalSeconds = 179;
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay() {
+  var m = Math.floor(totalSeconds / 60);
+  var s = String(totalSeconds % 60).padStart(2, '0');
+  var str = 'Код діятиме ще ' + m + ':' + s + ' хв';
+  document.querySelectorAll('.countdown-timer-el').forEach(function(el){ el.textContent = str; });
+  var fi = document.getElementById('fi-countdown-timer');
+  if (fi) fi.textContent = str;
+}
+
+/* ---- BOTTOM SHEET ---- */
+function openBottomSheet(cardIdx) {
+  activeSheetCardIdx = cardIdx;
+  var translateBtn = document.getElementById('sheet-translate-btn');
+  var translateLabel = document.getElementById('sheet-translate-label');
+  if (cardIdx === 1 || cardIdx === 3) {
+    translateBtn.style.display = '';
+    translateLabel.textContent = cardLang[cardIdx] === 'uk' ? 'Перевести на англійську' : 'Перевести на українську';
+  } else {
+    translateBtn.style.display = 'none';
+  }
+  document.getElementById('sheet-overlay').classList.add('open');
+}
+function closeBottomSheet() { document.getElementById('sheet-overlay').classList.remove('open'); }
+
+document.getElementById('sheet-overlay').addEventListener('click', function(e){
+  if (e.target === this) closeBottomSheet();
+});
+document.getElementById('sheet-close-btn').addEventListener('click', closeBottomSheet);
+document.getElementById('sheet-fullinfo-btn').addEventListener('click', openFullInfoScreen);
+document.getElementById('sheet-translate-btn').addEventListener('click', toggleCardLanguage);
+document.getElementById('sheet-qr-btn').addEventListener('click', function(){ handleMenuCodeClick('qr'); });
+document.getElementById('sheet-bar-btn').addEventListener('click', function(){ handleMenuCodeClick('bar'); });
+
+/* ---- ПЕРЕКЛАД ---- */
+function toggleCardLanguage() {
+  var idx = activeSheetCardIdx;
+  if (idx !== 1 && idx !== 3) { closeBottomSheet(); return; }
+  var newLang = cardLang[idx] === 'uk' ? 'en' : 'uk';
+  cardLang[idx] = newLang;
+  var front = document.getElementById('front-' + idx);
+  front.querySelectorAll('[data-uk]').forEach(function(el){
+    el.textContent = el.dataset[newLang] || el.textContent;
+  });
+  closeBottomSheet();
+  showToast(newLang === 'en' ? 'Перекладено на англійську' : 'Перекладено на українську');
+}
+
+/* ---- MENU CODE ---- */
+function handleMenuCodeClick(type) {
+  closeBottomSheet();
+  var cardInner = document.querySelectorAll('.flip-card-inner')[activeSheetCardIdx];
+  if (!cardInner) return;
+  if (!cardInner.classList.contains('flipped')) {
+    cardInner.classList.add('flipped');
+    generateCodesForIndex(activeSheetCardIdx);
+    resetAndStartTimer();
+  }
+  setTimeout(function(){ setActiveCode(activeSheetCardIdx, type); }, 150);
+}
+
+/* ---- FULL INFO ---- */
+function openFullInfoScreen() {
+  closeBottomSheet();
+  buildFullInfoContent(activeSheetCardIdx);
+  var screen = document.getElementById('full-info-screen');
+  screen.style.transition = 'transform 0.4s cubic-bezier(0.25,1,0.5,1)';
+  screen.style.transform = 'translateY(0)';
+  screen.classList.add('open');
+}
+function closeFullInfoScreen() {
+  var screen = document.getElementById('full-info-screen');
+  screen.style.transition = 'transform 0.35s cubic-bezier(0.25,1,0.5,1)';
+  screen.style.transform = 'translateY(100%)';
+  screen.classList.remove('open');
+}
+
+document.getElementById('fi-close-btn').addEventListener('click', closeFullInfoScreen);
+document.getElementById('fi-copy-num-btn').addEventListener('click', function(){
+  copyToClipboard(document.getElementById('fi-main-num').textContent);
+});
+
+/* Drag-to-close */
+var dragPanel = document.getElementById('full-info-screen');
+var dragTrigger = document.getElementById('fi-header-trigger');
+var startY = 0, deltaY = 0;
+dragTrigger.addEventListener('touchstart', function(e){ startY = e.touches[0].clientY; dragPanel.style.transition = 'none'; }, {passive:true});
+dragTrigger.addEventListener('touchmove', function(e){ deltaY = e.touches[0].clientY - startY; if (deltaY > 0) dragPanel.style.transform = 'translateY(' + deltaY + 'px)'; }, {passive:true});
+dragTrigger.addEventListener('touchend', function(){
+  if (deltaY > 65) { closeFullInfoScreen(); }
+  else { dragPanel.style.transition = 'transform 0.3s cubic-bezier(0.25,1,0.5,1)'; dragPanel.style.transform = 'translateY(0)'; }
+  startY = 0; deltaY = 0;
+}, {passive:true});
+
+/* ---- ПОБУДОВА КОНТЕНТУ FULL INFO ---- */
+var fiCurrentIdx = 0;
+function buildFullInfoContent(idx) {
+  fiCurrentIdx = idx;
+  var titles = ['Паспорт громадянина України','International Passport','Картка платника податків','Driving Licence','єДокумент'];
+  var nums = [USER.passportNum, USER.foreignPassNum, USER.rnokpp, USER.driverLicNum, USER.rnokpp];
+  document.getElementById('fi-title').textContent = titles[idx];
+  document.getElementById('fi-main-num').textContent = nums[idx];
+  updateTickerTime();
+
+  var scroll = document.getElementById('fi-scroll-content');
+  var html = '';
+  if (idx === 0) html = fiPassport();
+  else if (idx === 1) html = fiForeign();
+  else if (idx === 2) html = fiRnokpp();
+  else if (idx === 3) html = fiDriver();
+  else html = fiEdoc();
+  html += fiQrBlock();
+  scroll.innerHTML = html;
+
+  setTimeout(function(){
+    var box = document.getElementById('fi-qr-container');
+    if (box && !box.hasChildNodes() && typeof QRCode !== 'undefined') {
+      new QRCode(box, {text:'https://diia.gov.ua', width:180, height:180, colorDark:'#000', colorLight:'#fff', correctLevel:QRCode.CorrectLevel.H});
+    }
+    var barSvg = document.getElementById('fi-bar-svg');
+    if (barSvg && typeof JsBarcode !== 'undefined') {
+      JsBarcode('#fi-bar-svg', USER.passportNum, {format:'CODE128', width:2, height:70, displayValue:true, fontSize:13, lineColor:'#000'});
+      barSvg.style.display = 'none';
+    }
+    document.querySelectorAll('.fi-code-switch').forEach(function(btn){
+      btn.addEventListener('click', function(){ fiSwitchCode(btn.dataset.type); });
+    });
+    updateTimerDisplay();
+  }, 100);
+}
+
+function fCard(html){ return '<div class="fi-card-white">' + html + '</div>'; }
+function fRow(label, value, copyVal){
+  var copy = copyVal ? '<button class="fi-copy-btn" onclick="copyToClipboard(\'' + copyVal + '\')"><img src="https://www.svgrepo.com/show/500531/copy.svg" alt="Copy"></button>' : '';
+  return '<div class="fi-data-group"><span class="fi-meta-label">' + label + '</span><div class="fi-val-flex"><span class="fi-val-text">' + value + '</span>' + copy + '</div></div>';
+}
+function fBiRow(uk, en, value, copyVal){
+  return fRow(uk + '<br><span style="color:#8e8e93;font-weight:400;">' + en + '</span>', value, copyVal);
+}
+function fPersonBlock(showSig) {
+  var sig = showSig ? '<div class="fi-signature-wrap"><img src="' + USER.signature + '" alt="Підпис"></div>' : '';
+  var fiPhoto = fiCurrentIdx===0?USER.photoUA:fiCurrentIdx===1?USER.photoIntl:fiCurrentIdx===3?USER.photoDL:USER.photo;
+  return fCard('<div class="fi-ua-fullname">' + USER.lastName + ' ' + USER.firstName + '<br>' + USER.patronymic + '</div>'
+    + '<div class="fi-en-fullname">' + USER.lastNameEn + ' ' + USER.firstNameEn + '</div>'
+    + '<div class="fi-photo-row"><img src="' + fiPhoto + '" class="fi-large-avatar" alt="Фото">'
+    + '<div class="fi-photo-side-fields">'
+    + '<div class="fi-data-group"><span class="fi-meta-label">Дата народження:<br><span style="color:#8e8e93;font-weight:400;">Date of birth</span></span>'
+    + '<span class="fi-meta-value">' + USER.dob + '</span></div>' + sig + '</div></div>');
+}
+function fSexNat(){
+  return fCard('<div class="fi-two-col-row"><div class="fi-col">'
+    + fBiRow('Стать:','Sex', USER.sex + '<br><span style="color:#8e8e93;font-weight:400;">' + USER.sexEn + '</span>')
+    + '</div><div class="fi-col">'
+    + fBiRow('Громадянство:','Nationality', USER.nationality + '<br><span style="color:#8e8e93;font-weight:400;">' + USER.nationalityEn + '</span>')
+    + '</div></div>');
+}
+function fiQrBlock(){
+  return '<div class="fi-qr-card"><div class="fi-qr-timer" id="fi-countdown-timer">Код діятиме ще 2:59 хв</div>'
+    + '<div class="fi-qr-box"><div id="fi-qr-container"></div><svg id="fi-bar-svg" style="display:none;max-width:100%;"></svg></div>'
+    + '<div class="fi-controls-row">'
+    + '<div class="control-item"><button class="control-btn-circle btn-black fi-code-switch" data-type="qr"><img src="https://www.svgrepo.com/show/365672/qr-code-thin.svg" style="width:24px;height:24px;filter:invert(100%);" alt="QR"></button><span>QR-код</span></div>'
+    + '<div class="control-item"><button class="control-btn-circle btn-gray fi-code-switch" data-type="bar"><img src="https://www.svgrepo.com/show/113432/bar-code.svg" style="width:24px;height:24px;" alt="Bar"></button><span>Штрихкод</span></div>'
+    + '</div></div>';
+}
+function fiSwitchCode(type){
+  var qr = document.getElementById('fi-qr-container');
+  var bar = document.getElementById('fi-bar-svg');
+  var btns = document.querySelectorAll('.fi-code-switch');
+  if (type === 'qr') {
+    qr.style.display = 'flex'; bar.style.display = 'none';
+    btns[0].className = 'control-btn-circle btn-black fi-code-switch';
+    btns[1].className = 'control-btn-circle btn-gray fi-code-switch';
+  } else {
+    qr.style.display = 'none'; bar.style.display = 'block';
+    btns[0].className = 'control-btn-circle btn-gray fi-code-switch';
+    btns[1].className = 'control-btn-circle btn-black fi-code-switch';
+  }
+}
+
+function fiPassport(){
+  return fPersonBlock(true) + fSexNat()
+    + fCard('<div class="fi-two-col-row"><div class="fi-col">' + fBiRow('Дата видачі:','Date of issue', USER.passportIssue) + '</div><div class="fi-col">' + fBiRow('Дійсний до:','Date of expiry', USER.passportExpiry) + '</div></div>' + fBiRow('Орган, що видав:','Authority', USER.passportAuth))
+    + fCard(fBiRow('РНОКПП (ІПН):','Individual Tax Number', '<span style="font-size:18px;font-weight:600;">' + USER.rnokpp + '</span>', USER.rnokpp) + '<div class="fi-status-sub">Verified by State Tax Service on ' + USER.taxVerifiedDate + '</div>')
+    + fCard(fBiRow('Запис № (УНЗР):','Record No.', '<span style="font-size:18px;font-weight:600;">' + USER.unzr + '</span>', USER.unzr) + fBiRow('Місце народження:','Place of birth', USER.placeOfBirth) + fBiRow('Місце проживання:','Legal address', USER.address) + fBiRow('Дата реєстрації:','Registered on', USER.addressReg));
+}
+function fiForeign(){
+  return fCard(
+    '<div style="font-size:20px;font-weight:700;color:#000;line-height:1.4;">International Passport</div>' +
+    '<div style="font-size:15px;font-weight:400;color:#000;margin-top:2px;">Паспорт для виїзду за кордон</div>' +
+    '<div style="font-size:14px;color:#8e8e93;margin-top:2px;">Ukraine · Україна</div>'
+  ) +
+  fPersonBlock(true) + fSexNat()
+    + fCard(fBiRow('Номер документа:','Document No.', '<span style="font-size:18px;font-weight:600;">' + USER.foreignPassNum + '</span>', USER.foreignPassNum)
+      + '<div class="fi-two-col-row">'
+     + '<div class="fi-col">' + fBiRow('Дата видачі:','Date of issue', USER.foreignIssue) + '</div><div class="fi-col">' + fBiRow('Дійсний до:','Date of expiry', USER.foreignExpiry) + '</div></div>' + fBiRow('Орган, що видав:','Authority', USER.passportAuth))
+    + fCard(fBiRow('РНОКПП (ІПН):','Individual Tax Number', '<span style="font-size:18px;font-weight:600;">' + USER.rnokpp + '</span>', USER.rnokpp) + '<div class="fi-status-sub">Verified by State Tax Service on ' + USER.taxVerifiedDate + '</div>')
+    + fCard(fBiRow('Запис № (УНЗР):','Record No.', '<span style="font-size:18px;font-weight:600;">' + USER.unzr + '</span>', USER.unzr) + fBiRow('Місце народження:','Place of birth', USER.placeOfBirth) + fBiRow('Місце проживання:','Legal address', USER.address) + fBiRow('Дата реєстрації:','Registered on', USER.addressReg));
+}
+function fiRnokpp(){
+  return fCard('<div class="fi-ua-fullname">' + USER.lastName + ' ' + USER.firstName + '<br>' + USER.patronymic + '</div><div style="margin-top:12px;">' + fRow('Дата народження:', USER.dob) + '</div>')
+    + fCard(fBiRow('РНОКПП:','Individual Tax Number', '<span style="font-size:22px;font-weight:600;">' + USER.rnokpp + '</span>', USER.rnokpp) + '<div class="fi-status-sub">Verified by State Tax Service on ' + USER.taxVerifiedDate + '</div>');
+}
+function fiDriver(){
+  return fCard(
+    '<div style="font-size:20px;font-weight:700;color:#000;line-height:1.4;">Driving Licence</div>' +
+    '<div style="font-size:15px;font-weight:400;color:#000;margin-top:2px;">Посвідчення водія</div>' +
+    '<div style="font-size:14px;color:#8e8e93;margin-top:2px;">Ukraine · Україна</div>'
+  ) +
+  fCard(
+    '<div class="fi-photo-row"><img src="' + USER.photoDL + '" class="fi-large-avatar" alt="Фото">' +
+    '<div class="fi-photo-side-fields">' +
+    '<div class="fi-data-group">' +
+    '<span class="fi-meta-label">Прізвище, ім\'я:<br><span style="color:#8e8e93;font-weight:400;">Surname, first name</span></span>' +
+    '<span class="fi-meta-value">' + USER.lastName + ' ' + USER.firstName + '<br>' + USER.patronymic + '</span>' +
+    '</div>' +
+    '<div class="fi-data-group"><span class="fi-meta-label">Дата народження:<br><span style="color:#8e8e93;font-weight:400;">Date of birth</span></span>' +
+    '<span class="fi-meta-value">' + USER.dob + '</span></div>' +
+    '<div class="fi-signature-wrap"><img src="' + USER.signature + '" alt="Підпис"></div>' +
+    '</div></div>'
+  ) +
+  fCard(
+    '<div class="fi-two-col-row"><div class="fi-col">' +
+    fBiRow('Стать:','Sex', USER.sex + '<br><span style="color:#8e8e93;font-weight:400;">' + USER.sexEn + '</span>') +
+    '</div><div class="fi-col">' +
+    fBiRow('Громадянство:','Nationality', USER.nationality + '<br><span style="color:#8e8e93;font-weight:400;">' + USER.nationalityEn + '</span>') +
+    '</div></div>'
+  ) +
+  fCard(
+    fBiRow('Номер посвідчення:','License No.', '<span style="font-size:18px;font-weight:600;">' + USER.driverLicNum + '</span>', USER.driverLicNum) +
+    '<div class="fi-two-col-row"><div class="fi-col">' +
+    fBiRow('Дата видачі:','Date of issue', USER.driverIssue) +
+    '</div><div class="fi-col">' +
+    fBiRow('Дійсний до:','Date of expiry', USER.driverExpiry) +
+    '</div></div>' +
+    fBiRow('Орган, що видав:','Authority', USER.driverAuthority)
+  ) +
+  fCard(
+    fBiRow('Категорія:','Category', USER.driverCats) +
+    fBiRow('Дата відкриття категорії:','Category issuing date', USER.driverCatDate)
+  );
+}
+function fiEdoc(){
+  return fPersonBlock(false)
+    + fCard(fBiRow('РНОКПП:','Individual Tax Number', '<span style="font-size:18px;font-weight:600;">' + USER.rnokpp + '</span>', USER.rnokpp) + '<div class="fi-status-sub">Дійсний у період воєнного стану в Україні</div>')
+    + fCard(fBiRow('Місце народження:','Place of birth', USER.placeOfBirth) + fBiRow('Дата народження:','Date of birth', USER.dob));
+}
+
+/* ---- COPY & TOAST ---- */
+function copyToClipboard(text){
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function(){ showToast('Скопійовано: ' + text); }).catch(function(){ fallbackCopy(text); });
+  } else { fallbackCopy(text); }
+}
+function fallbackCopy(text){
+  var ta = document.createElement('textarea');
+  ta.value = text; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+  showToast('Скопійовано: ' + text);
+}
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+}
+
+
+/* ── SPLASH LOGIC ── */
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    var sp = document.getElementById('splash-screen');
+    sp.classList.add('hide');
+    setTimeout(function(){ sp.style.display='none'; }, 500);
+  }, 1800);
+});
+
+/* ── СЕРВІСИ ДАНІ ── */
+var SVC_LIST = [
+  {ic:'https://www.svgrepo.com/show/213639/helmet.svg',nm:'Допомога армії'},
+  {ic:'<path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z" fill="white"/>',nm:'Незламність'},
+  {ic:'<rect x="2" y="5" width="20" height="14" rx="2" stroke="white" stroke-width="2" fill="none"/><line x1="2" y1="10" x2="22" y2="10" stroke="white" stroke-width="2"/>',nm:'Дія.Картка'},
+  {ic:'https://cdn.phototourl.com/free/2026-06-03-888d67bc-c625-477e-b8b9-dd3698cd5547.png',nm:'Військові облігації'},
+  {ic:'https://www.svgrepo.com/show/315080/sand-watch.svg',nm:'Лінія дронів'},
+  {ic:'https://www.svgrepo.com/show/333674/barcode.svg',nm:'Національний кешбек'},
+  {ic:'<circle cx="12" cy="12" r="9" stroke="white" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="3" fill="white"/>',nm:'Чатбот єВорог'},
+  {ic:'https://www.svgrepo.com/show/479490/birth-of-a-setting-with-a-spanner-and-a-screwdriver.svg',nm:'єВідновлення'},
+  {ic:'https://www.svgrepo.com/show/50891/ukrainian-hryvnia.svg',nm:'Міжнародний Реєстр збитків'},
+  {ic:'https://www.svgrepo.com/show/504911/stark-hantel.svg',nm:'Ветеранський спорт'},
+  {ic:'https://www.svgrepo.com/show/521098/car-1.svg',nm:'Водієві'},
+  {ic:'https://www.svgrepo.com/show/455478/house-real-estate.svg',nm:'Місце проживання'},
+  {ic:'https://www.svgrepo.com/show/350288/comment-outlined.svg',nm:'Опитування'},
+  {ic:'<rect x="4" y="4" width="16" height="16" rx="2" stroke="white" stroke-width="2" fill="none"/><path d="M8 10h8M8 14h5" stroke="white" stroke-width="2" stroke-linecap="round"/>',nm:'Податкові послуги'},
+  {ic:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/960px-Heart-hand-shake.svg.png',nm:'Допомога від держави'},
+  {ic:'https://www.svgrepo.com/show/488358/ring.svg',nm:'Шлюб онлайн'},
+  {ic:'https://www.svgrepo.com/show/521523/box.svg',nm:'Послуги для ВПО'},
+  {ic:'https://www.svgrepo.com/show/376687/suitcase-line.svg',nm:'Підприємцю'},
+];
+function renderServices(){
+  var g=document.getElementById('svc-grid');
+  if(!g) return;
+  g.innerHTML=SVC_LIST.map(function(s){
+    // Проверяем: если в ic передана ссылка из интернета, строим тег img
+    var iconHtml;
+    if (s.ic.trim().indexOf('http') === 0) {
+      iconHtml = '<img src="' + s.ic + '" class="svc-custom-icon" alt="' + s.nm + '">';
+    } else {
+      // Иначе оставляем старый добрый внутренний SVG
+      iconHtml = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none">' + s.ic + '</svg>';
+    }
+    
+    return '<div class="svc-card"><div class="svc-card-ic">' + iconHtml + '</div><div class="svc-card-nm">' + s.nm + '</div></div>';
+  }).join('');
+}
+/* ── МЕНЮ ── */
+function doLogout(){
+  document.getElementById('main-screen').style.display='none';
+  document.getElementById('pin-screen').style.display='flex';
+  currentPin=[];
+  updateDots();
+  // показуємо splash знову
+  var sp=document.getElementById('splash-screen');
+  sp.style.display='flex'; sp.style.opacity='1'; sp.classList.remove('hide');
+  setTimeout(function(){
+    sp.classList.add('hide');
+    setTimeout(function(){ sp.style.display='none'; },500);
+  },1500);
+}
+function updateMenuPhotos(){}
+
+/* ---- INIT ---- */
+document.addEventListener('DOMContentLoaded', function(){
+  /* PIN кнопки */
+  for (var i = 0; i <= 9; i++) {
+    (function(num){
+      var btn = document.getElementById(num === 0 ? 'btn0' : 'btn' + num);
+      if (btn) btn.addEventListener('click', function(){ pressNum(num); });
+    })(i);
+  }
+  document.getElementById('btnDel').addEventListener('click', deleteNum);
+  updateTickerTime();
+});
+
+
+
+
+var cameraStream = null;
+
+// Функция включения сканера
+function openDiiaScanner() {
+  var scannerScreen = document.getElementById('scanner-screen');
+  var video = document.getElementById('scanner-video');
+  
+  scannerScreen.style.display = 'flex';
+
+  // Запрашиваем доступ ТОЛЬКО к задней камере (facingMode: "environment")
+  navigator.mediaDevices.getUserMedia({ 
+    video: { facingMode: "environment" } 
+  })
+  .then(function(stream) {
+    cameraStream = stream;
+    video.srcObject = stream;
+  })
+  .catch(function(error) {
+    alert("Помилка доступу до камери: " + error.message);
+    closeDiiaScanner();
+  });
+}
+
+// Функция выключения сканера (гасим камеру, чтобы не жрала батарею)
+function closeDiiaScanner() {
+  document.getElementById('scanner-screen').style.display = 'none';
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(function(track) {
+      track.stop(); // Полностью отключаем глазок камеры
+    });
+    cameraStream = null;
+  }
+}
+
+
+
+</script>
+</body>
+</html>
